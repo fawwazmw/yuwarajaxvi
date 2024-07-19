@@ -40,7 +40,15 @@
                 </div>
             </div>
 
-            <p class="text-muted left-user-info">Admin Head</p>
+            <p class="text-muted left-user-info">
+                @if (Auth::user()->role == 'admin')
+                    Admin
+                @elseif(Auth::user()->role == 'teacher')
+                    SPV
+                @elseif(Auth::user()->role == 'student')
+                    Mahasiswa
+                @endif
+            </p>
 
             <ul class="list-inline">
                 <li class="list-inline-item">

@@ -193,7 +193,7 @@
                 </div>
 
                 <!-- item-->
-                <a href="{{ route('second', ['contacts', 'profile']) }}" class="dropdown-item notify-item">
+                <a href="{{ route('second', ['account', 'profile']) }}" class="dropdown-item notify-item">
                     <i class="fe-user"></i>
                     <span>My Account</span>
                 </a>
