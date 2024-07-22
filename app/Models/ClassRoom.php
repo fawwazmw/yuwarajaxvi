@@ -9,6 +9,8 @@ class ClassRoom extends Model
 {
     use HasFactory;
 
+    protected $table = 'classes'; // Nama tabel yang benar
+
     protected $fillable = [
         'name',
         'description',
@@ -22,7 +24,7 @@ class ClassRoom extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class, 'class_user');
+        return $this->belongsToMany(User::class, 'class_user', 'class_id', 'user_id');
     }
 
     public function assignments()

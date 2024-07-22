@@ -15,7 +15,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'phone',
+        'nim',
+        'description',
+        'profile_image',
     ];
 
     protected $hidden = [
@@ -29,6 +33,11 @@ class User extends Authenticatable
 
     public function classes()
     {
-        return $this->belongsToMany(ClassRoom::class, 'class_user');
+        return $this->belongsToMany(ClassRoom::class, 'class_user', 'user_id', 'class_id');
+    }
+
+    public function prodi()
+    {
+        return $this->belongsToMany(Prodi::class, 'prodi_user');
     }
 }

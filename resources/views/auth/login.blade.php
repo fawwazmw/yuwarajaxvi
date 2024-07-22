@@ -15,9 +15,9 @@
                 <div class="col-md-8 col-lg-6 col-xl-4">
                     <div class="text-center">
                         <a href="{{ route('home') }}">
-                            <img src="/images/logo-dark.png" alt="" height="22" class="mx-auto">
+                            <img src="/images/yuwaraja.png" alt="" height="28" class="mx-auto">
                         </a>
-                        <p class="text-muted mt-2 mb-4">Responsive Admin Dashboard</p>
+                        <p class="text-muted mt-2 mb-4">Student Dashboard Vokasi UB</p>
                     </div>
                     <div class="card">
                         <div class="card-body p-4">

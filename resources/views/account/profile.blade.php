@@ -4,38 +4,36 @@
     @vite(['node_modules/sweetalert2/dist/sweetalert2.min.css'])
     @vite(['node_modules/dropzone/dist/min/dropzone.min.css', 'node_modules/dropify/dist/css/dropify.min.css'])
     @vite(['node_modules/mohithg-switchery/dist/switchery.min.css', 'node_modules/multiselect/css/multi-select.css', 'node_modules/select2/dist/css/select2.css', 'node_modules/selectize/dist/css/selectize.bootstrap3.css', 'node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'])
+    <style>
+        .avatar-xxxl {
+            width: 150px;
+            /* Adjust size as needed */
+            height: 150px;
+            /* Adjust size as needed */
+            object-fit: cover;
+        }
+    </style>
 @endsection
 
 @section('content')
     <div class="row">
-
         <div class="col-lg-3">
             <div class="card">
                 <div class="card-body">
                     <div class="nav flex-column nav-pills nav-pills-tab" id="v-pills-tab" role="tablist"
                         aria-orientation="vertical">
-                        <a class="nav-link active show mb-1 d-flex align-items-center" id="v-pills-home-tab"
-                            data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home"
-                            aria-selected="true" style="height: 50px; font-size: 1rem;">
+                        <a class="nav-link active mb-1 d-flex align-items-center" id="v-pills-home-tab"
+                            href="{{ route('profile.edit') }}" role="tab" aria-selected="true"
+                            style="height: 50px; font-size: 1rem;">
                             <i class="fas fa-user-alt mr-2"
-                                style="font-size: 1rem; margin-right:10px; margin-bottom:2px;"></i> Detail
-                            Profile
+                                style="font-size: 1rem; margin-right:10px; margin-bottom:2px;"></i> Detail Profile
                         </a>
-                        <a class="nav-link mb-1 d-flex align-items-center" id="v-pills-home-tab" data-bs-toggle="pill"
-                            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"
-                            style="height: 50px; font-size: 1rem;">
-                            <i class="fas fa-user-edit" style="font-size: 1rem; margin-right:8px; margin-bottom:2px;"></i>
-                            Personal Data</a>
-                        <a class="nav-link mb-1 d-flex align-items-center" id="v-pills-home-tab" data-bs-toggle="pill"
-                            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"
-                            style="height: 50px; font-size: 1rem;">
-                            <i class="fab fa-cloudsmith" style="font-size: 1rem; margin-right:18px; margin-bottom:2px;"></i>
-                            Social Media</a>
-                        <a class="nav-link d-flex align-items-center" id="v-pills-home-tab" data-bs-toggle="pill"
-                            href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"
+                        <a class="nav-link d-flex align-items-center" id="v-pills-password-tab"
+                            href="{{ route('password.edit') }}" role="tab" aria-selected="false"
                             style="height: 50px; font-size: 1rem;">
                             <i class="fas fa-key" style="font-size: 1rem; margin-right:16px; margin-bottom:2px;"></i>
-                            Password</a>
+                            Password
+                        </a>
                     </div>
                 </div>
             </div>
@@ -44,68 +42,39 @@
         <div class="col-lg-9">
             <div class="card">
                 <h5 class="card-header">
-
-                    <i class="fas fa-user-circle me-2"></i> UPDATE PROFILE <!-- Updated icon to represent progress -->
+                    <i class="fas fa-user-circle me-2"></i> UPDATE PROFILE
                 </h5>
                 <div class="d-flex justify-content-center mt-4">
-                    <img src="/images/users/user-1.jpg" alt="user-img" title="Mat Helme"
-                        class="rounded-circle img-thumbnail avatar-xxxl">
+                    <img src="{{ $user->profile_image ? asset($user->profile_image) : asset('/images/users/user-1.jpg') }}"
+                        alt="user-img" title="{{ $user->name }}" class="rounded-circle img-thumbnail "
+                        style="width: 150px; height: 150px; object-fit: cover;">
                 </div>
                 <div class="card-body">
-                    <h4 class="header-title">Profile Picture</h4>
-                    <p class="sub-header">
-                        Ini adalah photo profile yang akan terlihat oleh semua mahasiswa.
-                    </p>
-
-                    <form action="/" method="post" class="dropzone" id="myAwesomeDropzone" data-plugin="dropzone"
-                        data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                        <div class="fallback">
-                            <input name="file" type="file" multiple />
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
                         </div>
+                    @endif
 
-                        <div class="dz-message needsclick">
-                            <i class="h1 text-muted dripicons-cloud-upload"></i>
-                            <h3>Drop files here or click to upload.</h3>
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
                         </div>
-                    </form>
-
-                    <div class="alert alert-info mt-3 text-xl" role="alert">
-                        <i class="mdi mdi-alert-circle-outline me-2"></i> Foto Profil disarankan memiliki rasio <strong>1 :
-                            1</strong> atau berukuran tidak lebih dari 1MB
-                    </div>
-
-                    <!-- Preview -->
-                    <div class="dropzone-previews mt-3" id="file-previews"></div>
-
-                    <!-- file preview template -->
-                    <div class="d-none" id="uploadPreviewTemplate">
-                        <div class="card mt-1 mb-0 shadow-none border">
-                            <div class="p-2">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <img data-dz-thumbnail src="#" class="avatar-sm rounded bg-light"
-                                            alt="">
-                                    </div>
-                                    <div class="col ps-0">
-                                        <a href="javascript:void(0);" class="text-muted fw-bold" data-dz-name></a>
-                                        <p class="mb-0" data-dz-size></p>
-                                    </div>
-                                    <div class="col-auto">
-                                        <!-- Button -->
-                                        <a href="" class="btn btn-link btn-lg text-muted" data-dz-remove>
-                                            <i class="dripicons-cross"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                    @endif
+                    <form action="{{ route('profile.update') }}" method="post" enctype="multipart/form-data"
+                        class="needs-validation" novalidate>
+                        @csrf
+                        <div class="mb-3">
+                            <label for="profile_image" class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control dropify" id="profile_image" name="profile_image"
+                                data-default-file="{{ $user->profile_image ? asset($user->profile_image) : asset('/images/users/user-1.jpg') }}" />
+                            <div class="form-text">Disarankan memiliki rasio 1 : 1 atau berukuran tidak lebih dari 2MB</div>
+                            <div class="alert alert-danger invalid-feedback" role="alert" id="profile_image_error">
+                                <i class="mdi mdi-alert-outline me-2"></i> Ukuran File lebih dari <strong>2MB</strong>
+                                compress atau ganti image untuk ubah profile image
                             </div>
                         </div>
-                    </div>
 
-                    <hr class="my-3"> <!-- Added horizontal line -->
-
-                </div> <!-- end card-body-->
-                <div class="card-body">
-                    <form class="needs-validation" novalidate>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="mb-3">
@@ -114,10 +83,7 @@
                                         <span class="input-group-text" id="inputGroupPrepend"><i
                                                 class="fas fa-user-circle"></i></span>
                                         <input type="text" class="form-control" id="validationCustomFullName"
-                                            placeholder="Full Name" value="" required />
-                                        <div class="valid-feedback">
-                                            Looks good!
-                                        </div>
+                                            name="name" placeholder="Full Name" value="{{ $user->name }}" required />
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -125,19 +91,15 @@
                                     <div class="input-group">
                                         <span class="input-group-text" id="inputGroupPrepend">@</span>
                                         <input type="text" class="form-control" id="validationCustomUsername"
-                                            placeholder="Username" aria-describedby="inputGroupPrepend" required />
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
-                                        </div>
+                                            value="{{ explode('@', $user->email)[0] }}" disabled />
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="validationCustomNIM" class="form-label">NIM</label>
-                                    <input type="text" class="form-control" id="validationCustomNIM"
-                                        placeholder="NIM" aria-describedby="inputGroupPrepend" required />
+                                    <input type="text" class="form-control" id="validationCustomNIM" name="nim"
+                                        placeholder="NIM" value="{{ $user->nim }}" required />
                                     <div class="invalid-feedback">
-                                        Please enter .
+                                        Please enter a valid NIM.
                                     </div>
                                 </div>
                             </div>
@@ -148,43 +110,58 @@
                                     <div class="input-group">
                                         <span class="input-group-text" id="inputGroupPrepend"><i
                                                 class="far fa-envelope"></i></span>
-                                        <input type="text" class="form-control" id="validationCustomEmail"
-                                            placeholder="Email Address" aria-describedby="inputGroupPrepend" required />
+                                        <input type="email" class="form-control" id="validationCustomEmail"
+                                            name="email" placeholder="Email Address" value="{{ $user->email }}"
+                                            required />
                                         <div class="invalid-feedback">
-                                            Please enter email.
+                                            Please enter a valid email.
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="validationCustomPhone" class="form-label">Phone / WhatsApp</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="inputGroupPrepend"><i
                                                 class="fas fa-phone"></i></span>
                                         <input type="text" class="form-control" id="validationCustomPhone"
-                                            placeholder="Phone Number" aria-describedby="inputGroupPrepend" required />
+                                            name="phone" placeholder="Phone Number" value="{{ $user->phone }}"
+                                            required />
                                         <div class="invalid-feedback">
-                                            Please enter email.
+                                            Please enter a valid phone number.
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">Group Cluster</label> <br />
-                                    <select id="selectize-select">
-                                        <option data-display="Select">Nothing</option>
-                                        <option value="1">Batu</option>
-                                        <option value="2">Malang</option>
-                                        <option value="3">Purwokerto</option>
-                                        <option value="4">Banyumas</option>
+                                    <select class="form-select" name="class_id">
+                                        <option value="">Nothing</option>
+                                        @foreach ($classes as $class)
+                                            <option value="{{ $class->id }}"
+                                                {{ $user->classes->contains($class->id) ? 'selected' : '' }}>
+                                                {{ $class->name }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
 
+
+                        <div class="mb-3">
+                            <label class="form-label">Program Studi</label> <br />
+                            <select class="form-select" name="prodi_id">
+                                <option value="">Nothing</option>
+                                @foreach ($prodi as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ $user->prodi->contains($item->id) ? 'selected' : '' }}>{{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label for="description-textarea" class="form-label">Deskripsi Diri</label>
-                            <textarea class="form-control" id="description-textarea" rows="5"></textarea>
+                            <textarea class="form-control" id="description-textarea" rows="5" name="description">{{ $user->description }}</textarea>
                         </div>
                         <button class="btn btn-warning" type="submit">Update Profile</button>
                     </form>
@@ -199,4 +176,16 @@
     @vite('resources/js/pages/widgets.init.js')
     @vite(['resources/js/pages/form-fileuploads.init.js'])
     @vite(['resources/js/pages/form-advanced.init.js'])
+    <script>
+        document.getElementById('profile_image').addEventListener('change', function() {
+            const file = this.files[0];
+            const errorElement = document.getElementById('profile_image_error');
+            if (file.size > 2 * 1024 * 1024) {
+                errorElement.style.display = 'block';
+                this.value = ''; // Clear the file input
+            } else {
+                errorElement.style.display = 'none';
+            }
+        });
+    </script>
 @endsection

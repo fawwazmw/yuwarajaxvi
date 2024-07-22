@@ -16,7 +16,9 @@ class LockScreenController extends Controller
             return redirect()->route('login');
         }
 
-        return view('auth.lock-screen');
+        session(['locked' => true]);
+
+        return view('auth.lock-screen', ['user' => Auth::user()]);
     }
 
     public function unlockScreen(Request $request)
@@ -29,9 +31,11 @@ class LockScreenController extends Controller
 
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors([
-                'password' => 'The provided password does not match our records.',
+                'password' => 'Pasword anda tidak sesuai dengan database',
             ]);
         }
+
+        session(['locked' => false]);
 
         return redirect()->intended('home');
     }

@@ -181,7 +181,8 @@
         <li class="dropdown notification-list topbar-dropdown">
             <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown"
                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                <img src="/images/users/user-1.jpg" alt="user-image" class="rounded-circle">
+                <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : asset('/images/users/user-1.jpg') }}"
+                    alt="user-image" class="rounded-circle" style="object-fit: cover;">
                 <span class="pro-user-name ms-1">
                     {{ Auth::user()->name }} <i class="mdi mdi-chevron-down"></i>
                 </span>
@@ -193,7 +194,7 @@
                 </div>
 
                 <!-- item-->
-                <a href="{{ route('second', ['account', 'profile']) }}" class="dropdown-item notify-item">
+                <a href="{{ route('profile.edit') }}" class="dropdown-item notify-item">
                     <i class="fe-user"></i>
                     <span>My Account</span>
                 </a>

@@ -19,7 +19,7 @@
                                 <div class="auth-logo">
                                     <a href="{{ route('home') }}" class="logo logo-dark text-center">
                                         <span class="logo-lg">
-                                            <img src="/images/logo-dark.png" alt="" height="22">
+                                            <img src="/images/yuwaraja.png" alt="" height="28">
                                         </span>
                                     </a>
                                     <a href="{{ route('home') }}" class="logo logo-light text-center">

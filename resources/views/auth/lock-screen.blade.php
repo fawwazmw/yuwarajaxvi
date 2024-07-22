@@ -15,7 +15,7 @@
                 <div class="col-md-8 col-lg-6 col-xl-4">
                     <div class="text-center">
                         <a href="{{ route('home') }}">
-                            <img src="/images/logo-dark.png" alt="" height="22" class="mx-auto">
+                            <img src="/images/yuwaraja.png" alt="" height="28" class="mx-auto">
                         </a>
                         <p class="text-muted mt-2 mb-4">Responsive Admin Dashboard</p>
                     </div>
@@ -24,11 +24,22 @@
                         <div class="card-body p-4">
                             <div class="text-center mb-4">
                                 <h4 class="text-uppercase mt-0">Welcome Back</h4>
-                                <h5 class="mb-4">{{ Auth::user()->name }}</h5> <!-- Display logged-in user's name -->
-                                <img src="/images/users/user-1.jpg" width="88" alt="user-image"
-                                    class="rounded-circle img-thumbnail">
-                                <p class="text-muted my-4">Enter your password to login again</p>
+                                @if (Auth::check())
+                                    <h5 class="mb-4">{{ Auth::user()->name }}</h5>
+                                    <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : '/images/users/user-1.jpg' }}"
+                                        width="88" alt="user-image" class="rounded-circle img-thumbnail"
+                                        style="width: 120px; height: 120px; object-fit: cover;">
+                                    <p class="text-muted my-4">Enter your password to login again</p>
+                                @else
+                                    <p class="text-muted my-4">User not authenticated</p>
+                                @endif
                             </div>
+
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
 
                             <form method="POST" action="{{ route('unlock-screen') }}">
                                 @csrf

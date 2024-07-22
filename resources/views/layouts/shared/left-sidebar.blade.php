@@ -6,15 +6,15 @@
         <!-- User box -->
         <div class="user-box text-center">
 
-            <img src="/images/users/user-1.jpg" alt="user-img" title="Mat Helme"
-                class="rounded-circle img-thumbnail avatar-md">
+            <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : asset('/images/users/user-1.jpg') }}"
+                alt="user-img" title="Mat Helme" class="rounded-circle img-thumbnail avatar-md" style="object-fit: cover;">
             <div class="dropdown">
                 <a href="#" class="user-name dropdown-toggle h5 mt-2 mb-1 d-block" data-bs-toggle="dropdown"
                     aria-expanded="false">{{ Auth::user()->name }}</a>
                 <div class="dropdown-menu user-pro-dropdown">
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="{{ route('profile.edit') }}" class="dropdown-item notify-item">
                         <i class="fe-user me-1"></i>
                         <span>My Account</span>
                     </a>
@@ -26,13 +26,15 @@
                     </a>
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="#" class="dropdown-item notify-item"
+                        onclick="event.preventDefault(); document.getElementById('lock-screen-form').submit();">
                         <i class="fe-lock me-1"></i>
                         <span>Lock Screen</span>
                     </a>
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="#" class="dropdown-item notify-item"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fe-log-out me-1"></i>
                         <span>Logout</span>
                     </a>
@@ -79,6 +81,28 @@
                         <span> Dashboard </span>
                     </a>
                 </li>
+
+                @if (Auth::user()->role !== 'student')
+                    <li class="menu-title">Admin</li>
+
+                    <li>
+                        <a href="#admin" data-bs-toggle="collapse">
+                            <i class="mdi mdi-database-outline"></i>
+                            <span> Data Masters </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="admin">
+                            <ul class="nav-second-level">
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'users']) }}">User Management</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'clusters']) }}">Cluster Management</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
                 <li class="menu-title mt-2">Apps</li>
 
