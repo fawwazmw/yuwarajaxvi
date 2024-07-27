@@ -19,6 +19,7 @@ return new class extends Migration
             $table->bigInteger('nim')->unique()->nullable();
             $table->text('description')->nullable();
             $table->string('profile_image')->nullable();
+            $table->integer('total_grade')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

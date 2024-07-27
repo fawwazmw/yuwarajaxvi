@@ -15,6 +15,10 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\DataMasterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClusterController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\SubmissionController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProdiController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -51,10 +55,59 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::get('/data-masters/clusters', [ClusterController::class, 'index'])->name('clusters.index');
-    Route::get('/clusters/add', [ClusterController::class, 'create'])->name('clusters.create');
-    Route::post('/clusters', [ClusterController::class, 'store'])->name('clusters.store');
-    Route::get('/clusters/{id}/edit', [ClusterController::class, 'edit'])->name('clusters.edit');
-    Route::put('/clusters/{id}', [ClusterController::class, 'update'])->name('clusters.update');
-    Route::delete('/clusters/{id}', [ClusterController::class, 'destroy'])->name('clusters.destroy');
+
+    // Cluster
+    Route::prefix('data-masters')->group(function () {
+        Route::get('/clusters', [ClusterController::class, 'index'])->name('clusters.index');
+        Route::get('/clusters/add', [ClusterController::class, 'create'])->name('clusters.create');
+        Route::post('/clusters', [ClusterController::class, 'store'])->name('clusters.store');
+        Route::get('/clusters/{id}/edit', [ClusterController::class, 'edit'])->name('clusters.edit');
+        Route::put('/clusters/{id}', [ClusterController::class, 'update'])->name('clusters.update');
+        Route::delete('/clusters/{id}', [ClusterController::class, 'destroy'])->name('clusters.destroy');
+    });
+
+    Route::prefix('clusters')->group(function () {
+        Route::get('/clusters', [ClusterController::class, 'userIndex'])->name('user.clusters.index');
+        Route::post('/clusters/join', [ClusterController::class, 'joinClass'])->name('user.clusters.join');
+        Route::delete('/clusters/leave/{id}', [ClusterController::class, 'leaveClass'])->name('user.clusters.leave');
+    });
+
+    // Assignment
+    Route::get('/data-masters/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
+    Route::get('/assignments/add', [AssignmentController::class, 'create'])->name('assignments.create');
+    Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+    Route::get('/assignments/{id}/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
+    Route::put('/assignments/{id}', [AssignmentController::class, 'update'])->name('assignments.update');
+    Route::delete('/assignments/{id}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+
+    Route::get('/task/task-details/{id}', [AssignmentController::class, 'show'])->name('tasks.show');
+    Route::get('/task/task-list', [AssignmentController::class, 'taskView'])->name('assignments.taskView');
+
+    Route::post('/assignments/{id}/submit', [AssignmentController::class, 'submit'])->name('assignments.submit');
+
+
+    // Submission
+    Route::get('/data-masters/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/add', [SubmissionController::class, 'create'])->name('submissions.create');
+    Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
+    Route::get('/submissions/{id}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
+    Route::put('/submissions/{id}', [SubmissionController::class, 'update'])->name('submissions.update');
+    Route::delete('/submissions/{id}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
+
+    // Comment
+    Route::get('/data-masters/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::get('/comments/add', [CommentController::class, 'create'])->name('comments.create');
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::get('/comments/{id}/edit', [CommentController::class, 'edit'])->name('comments.edit');
+    Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Prodi
+
+    Route::get('/data-masters/prodis', [ProdiController::class, 'index'])->name('prodis.index');
+    Route::get('/prodis/add', [ProdiController::class, 'create'])->name('prodis.create');
+    Route::post('/prodis', [ProdiController::class, 'store'])->name('prodis.store');
+    Route::get('/prodis/{id}/edit', [ProdiController::class, 'edit'])->name('prodis.edit');
+    Route::put('/prodis/{id}', [ProdiController::class, 'update'])->name('prodis.update');
+    Route::delete('/prodis/{id}', [ProdiController::class, 'destroy'])->name('prodis.destroy');
 });

@@ -82,6 +82,21 @@
                     </a>
                 </li>
 
+                <li class="menu-title">Student List</li>
+
+                <li>
+                    <a href="{{ route('second', ['task', 'task-list']) }}">
+                        <i class="mdi mdi-account-group"></i>
+                        <span> My Task </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('second', ['clusters', 'clusters']) }}">
+                        <i class="mdi mdi-account-group"></i>
+                        <span> My Cluster </span>
+                    </a>
+                </li>
+
                 @if (Auth::user()->role !== 'student')
                     <li class="menu-title">Admin</li>
 
@@ -98,6 +113,22 @@
                                 </li>
                                 <li>
                                     <a href="{{ route('second', ['data-masters', 'clusters']) }}">Cluster Management</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'assignments']) }}">Assignment
+                                        Management</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'submissions']) }}">Submission
+                                        Management</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'comments']) }}">Comment
+                                        Management</a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'prodis']) }}">Prodi
+                                        Management</a>
                                 </li>
                             </ul>
                         </div>

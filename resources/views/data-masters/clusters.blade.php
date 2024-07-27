@@ -38,6 +38,7 @@
                                     <th>Description</th>
                                     <th>SPV</th>
                                     <th>Member Cluster</th>
+                                    <th>Class Code</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
@@ -46,9 +47,10 @@
                                 @foreach ($classes as $class)
                                     <tr>
                                         <td>{{ $class->name }}</td>
-                                        <td>{{ $class->description }}</td>
+                                        <td>{{ Str::limit($class->description, 50) }}</td>
                                         <td>{{ $class->teacher_name }}</td>
                                         <td>{{ $class->students_count }}</td>
+                                        <td>{{ $class->class_code }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('clusters.edit', ['id' => $class->id]) }}"
                                                 class="btn btn-warning btn-sm waves-effect waves-light edit-btn"><i

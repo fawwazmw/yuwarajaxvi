@@ -240,18 +240,18 @@
     <div class="logo-box">
         <a href="{{ route('any', 'index') }}" class="logo logo-light text-center">
             <span class="logo-sm">
-                <img src="/images/logo-sm.png" alt="" height="22">
+                <img src="/images/yuwaraja-logo.svg" alt="" height="45">
             </span>
             <span class="logo-lg">
-                <img src="/images/logo-light.png" alt="" height="16">
+                <img src="/images/yuwaraja-logo.svg" alt="" height="45">
             </span>
         </a>
         <a href="{{ route('any', 'index') }}" class="logo logo-dark text-center">
             <span class="logo-sm">
-                <img src="/images/logo-sm.png" alt="" height="22">
+                <img src="/images/yuwaraja-logo.svg" alt="" height="45">
             </span>
             <span class="logo-lg">
-                <img src="/images/yuwaraja.png" alt="" height="22">
+                <img src="/images/yuwaraja-logo.svg" alt="" height="45">
             </span>
         </a>
     </div>

@@ -15,9 +15,9 @@
                 <div class="col-md-8 col-lg-6 col-xl-4">
                     <div class="text-center">
                         <a href="{{ route('home') }}">
-                            <img src="/images/logo-dark.png" alt="" height="22" class="mx-auto">
+                            <img src="/images/yuwaraja-logo.svg" alt="" height="55" class="mx-auto">
                         </a>
-                        <p class="text-muted mt-2 mb-4">Responsive Admin Dashboard</p>
+                        <p class="text-white mt-2 mb-4">Responsive Admin Dashboard</p>
                     </div>
                     <div class="card text-center">
                         <div class="card-body p-4">
@@ -28,7 +28,8 @@
                             <p class="text-muted font-14 mt-2"> An email has been sent to
                                 <b>{{ auth()->user()->email }}</b>.
                                 Please check for an email from our company and click on the included link to
-                                verify your email address. </p>
+                                verify your email address.
+                            </p>
                             <a href="{{ route('home') }}"
                                 class="btn d-block btn-pink waves-effect waves-light mt-3">Back to Home</a>
                         </div> <!-- end card-body -->

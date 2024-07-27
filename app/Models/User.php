@@ -20,6 +20,7 @@ class User extends Authenticatable
         'nim',
         'description',
         'profile_image',
+        'total_grade'
     ];
 
     protected $hidden = [
@@ -39,5 +40,15 @@ class User extends Authenticatable
     public function prodi()
     {
         return $this->belongsToMany(Prodi::class, 'prodi_user');
+    }
+
+    public function assignments()
+    {
+        return $this->belongsToMany(Assignment::class, 'class_user', 'user_id', 'class_id');
+    }
+
+    public function userAssignments()
+    {
+        return $this->hasMany(UserAssignment::class);
     }
 }

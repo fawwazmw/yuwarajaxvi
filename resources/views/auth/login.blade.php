@@ -15,9 +15,9 @@
                 <div class="col-md-8 col-lg-6 col-xl-4">
                     <div class="text-center">
                         <a href="{{ route('home') }}">
-                            <img src="/images/yuwaraja.png" alt="" height="28" class="mx-auto">
+                            <img src="/images/yuwaraja-logo.svg" alt="" height="55" class="mx-auto">
                         </a>
-                        <p class="text-muted mt-2 mb-4">Student Dashboard Vokasi UB</p>
+                        <p class="mt-2 mb-4 text-white">Student Dashboard Vokasi UB</p>
                     </div>
                     <div class="card">
                         <div class="card-body p-4">
@@ -76,9 +76,10 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p><a href="{{ route('password.request') }}" class="text-muted ms-1"><i
-                                        class="fa fa-lock me-1"></i>Forgot your password?</a></p>
-                            <p class="text-muted">Don't have an account? <a href="{{ route('register') }}"
+                            <p><a href="{{ route('password.request') }}" class="ms-1 text-black"><i
+                                        class="fa fa-lock me-1"></i>Forgot your
+                                    password?</a></p>
+                            <p class="text-black">Don't have an account? <a href="{{ route('register') }}"
                                     class="text-dark ms-1"><b>Sign Up</b></a></p>
                         </div> <!-- end col -->
                     </div> <!-- end row -->

@@ -12,10 +12,14 @@ class Assignment extends Model
     protected $fillable = [
         'title',
         'description',
-        'class_id'
+        'class_id',
+        'due_date',
+        'status'
     ];
 
-    public function class()
+    protected $dates = ['due_date'];
+
+    public function classRoom()
     {
         return $this->belongsTo(ClassRoom::class, 'class_id');
     }
@@ -23,5 +27,20 @@ class Assignment extends Model
     public function submissions()
     {
         return $this->hasMany(Submission::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'class_user', 'class_id', 'user_id');
+    }
+
+    public function userAssignments()
+    {
+        return $this->hasMany(UserAssignment::class);
     }
 }

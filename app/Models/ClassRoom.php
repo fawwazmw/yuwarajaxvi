@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use illuminate\Support\Str;
 
 class ClassRoom extends Model
 {
@@ -14,8 +15,32 @@ class ClassRoom extends Model
     protected $fillable = [
         'name',
         'description',
-        'teacher_id'
+        'teacher_id',
+        'class_code'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->class_code = self::generateUniqueClassCode();
+        });
+    }
+
+    public static function generateUniqueClassCode()
+    {
+        do {
+            $code = Str::random(8);
+        } while (self::where('class_code', $code)->exists());
+
+        return $code;
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'class_user', 'class_id', 'user_id');
+    }
 
     public function teacher()
     {
@@ -29,6 +54,6 @@ class ClassRoom extends Model
 
     public function assignments()
     {
-        return $this->hasMany(Assignment::class);
+        return $this->hasMany(Assignment::class, 'class_id');
     }
 }
