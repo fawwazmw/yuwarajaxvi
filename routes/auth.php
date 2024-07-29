@@ -19,6 +19,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\AnnouncementController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -86,13 +87,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/assignments/{id}/submit', [AssignmentController::class, 'submit'])->name('assignments.submit');
 
 
-    // Submission
+    // Submission Admin
     Route::get('/data-masters/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
     Route::get('/submissions/add', [SubmissionController::class, 'create'])->name('submissions.create');
     Route::post('/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
     Route::get('/submissions/{id}/edit', [SubmissionController::class, 'edit'])->name('submissions.edit');
     Route::put('/submissions/{id}', [SubmissionController::class, 'update'])->name('submissions.update');
     Route::delete('/submissions/{id}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
+
+    // Submission User
+    Route::post('/task/submissions', [SubmissionController::class, 'storeUser'])->name('user.submissions.store');
+    Route::put('/task/submissions/{id}', [SubmissionController::class, 'updateUser'])->name('user.submissions.update');
+    Route::delete('/task/submissions/{id}', [SubmissionController::class, 'destroyUser'])->name('user.submissions.destroy');
 
     // Comment
     Route::get('/data-masters/comments', [CommentController::class, 'index'])->name('comments.index');
@@ -103,11 +109,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Prodi
-
     Route::get('/data-masters/prodis', [ProdiController::class, 'index'])->name('prodis.index');
     Route::get('/prodis/add', [ProdiController::class, 'create'])->name('prodis.create');
     Route::post('/prodis', [ProdiController::class, 'store'])->name('prodis.store');
     Route::get('/prodis/{id}/edit', [ProdiController::class, 'edit'])->name('prodis.edit');
     Route::put('/prodis/{id}', [ProdiController::class, 'update'])->name('prodis.update');
     Route::delete('/prodis/{id}', [ProdiController::class, 'destroy'])->name('prodis.destroy');
+
+    // Announcement
+    Route::get('/data-masters/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::get('/data-masters/announcements/add', [AnnouncementController::class, 'create'])->name('announcements.create');
+    Route::post('/data-masters/announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+    Route::get('/data-masters/announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
+    Route::put('/data-masters/announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+    Route::delete('/data-masters/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::get('/index', [AnnouncementController::class, 'latest'])->name('index');
 });

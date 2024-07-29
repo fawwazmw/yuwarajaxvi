@@ -130,6 +130,10 @@
                                     <a href="{{ route('second', ['data-masters', 'prodis']) }}">Prodi
                                         Management</a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('second', ['data-masters', 'announcements']) }}">Announcement
+                                        Management</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
