@@ -37,7 +37,18 @@ class LoginRequest extends FormRequest
         if (!$user) {
             $errors['email'] = __('auth.failed_email');
         } else {
-            if (!Auth::attempt($credentials, $this->boolean('remember'))) {
+            // Validasi password terlepas dari status aktif
+            if (!Auth::validate($credentials)) {
+                $errors['password'] = __('auth.failed_password');
+            }
+
+            // Tambahkan pengecekan user_status_verified setelah validasi password
+            if ($user->user_status_verified !== 'active') {
+                $errors['email'] = __('Jangan lupa, Hayolo belum konfirmasi ke SPV ya, konfirmasi dulu ya');
+            }
+
+            // Jika tidak ada error, baru lakukan attempt untuk autentikasi
+            if (empty($errors) && !Auth::attempt($credentials, $this->boolean('remember'))) {
                 $errors['password'] = __('auth.failed_password');
             }
         }

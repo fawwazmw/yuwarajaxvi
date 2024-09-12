@@ -5,6 +5,7 @@
     @include('layouts.shared.title-meta', ['title' => 'Register'])
 
     @include('layouts.shared.head-css')
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="authentication-bg authentication-bg-pattern">
@@ -14,7 +15,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-4">
                     <div class="text-center">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('index') }}">
                             <img src="/images/yuwaraja-logo.svg" alt="" height="55" class="mx-auto">
                         </a>
                         <p class="text-white mt-2 mb-4">Student Dashboard Vokasi UB</p>
@@ -60,6 +61,9 @@
                                     <input class="form-control" type="password" id="password_confirmation"
                                         name="password_confirmation" required placeholder="Confirm your password">
                                 </div>
+                                
+                                <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+                                <br>
 
                                 <div class="mb-3 d-grid text-center">
                                     <button class="btn btn-primary" type="submit"> Sign Up </button>

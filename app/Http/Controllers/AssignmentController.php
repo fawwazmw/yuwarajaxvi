@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Assignment;
 use App\Models\ClassRoom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use App\Models\UserAssignment;
 use App\Models\Submission;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class AssignmentController extends Controller
 {
@@ -61,18 +63,19 @@ class AssignmentController extends Controller
 
         Log::info('Assignment added: ' . $assignment);
 
-        return redirect()->route('assignments.index')->with('success', 'Assignment added successfully.');
+        return redirect()->route('assignments.index')->with('success', 'Wah nambah tugas baru nich');
     }
 
     public function edit($id)
     {
         $assignment = Assignment::findOrFail($id);
+        $assignment->due_date = Carbon::parse($assignment->due_date); // Convert to Carbon instance
         $classes = ClassRoom::all();
         return view('data-masters.assignments-edit', compact('assignment', 'classes'));
     }
-
     public function update(Request $request, $id)
     {
+        // Validasi input dari form
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -80,12 +83,23 @@ class AssignmentController extends Controller
             'due_date' => 'required|date',
         ]);
 
+        // Cari assignment berdasarkan ID, jika tidak ditemukan akan mengeluarkan error 404
         $assignment = Assignment::findOrFail($id);
-        $assignment->update($request->all());
 
+        // Update data assignment
+        $assignment->title = $request->input('title');
+        $assignment->description = $request->input('description');
+        $assignment->class_id = $request->input('class_id');
+        $assignment->due_date = $request->input('due_date');
+
+        // Simpan perubahan ke database
+        $assignment->save();
+
+        // Logging untuk debugging
         Log::info('Assignment updated: ' . $assignment);
 
-        return redirect()->route('assignments.index')->with('success', 'Assignment updated successfully.');
+        // Redirect kembali ke halaman index dengan pesan sukses
+        return redirect()->route('assignments.index')->with('success', 'Wow ada perbaruan tugas nih wkwk');
     }
 
     public function destroy($id)
@@ -95,7 +109,7 @@ class AssignmentController extends Controller
 
         Log::info('Assignment deleted: ' . $assignment);
 
-        return response()->json(['success' => 'Assignment deleted successfully.']);
+        return redirect()->route('assignments.index')->with('success', 'Wah tugas berhasil dihapus!');
     }
 
     public function submit(Request $request, $id)
@@ -131,15 +145,44 @@ class AssignmentController extends Controller
         return view('task.task-list', compact('userAssignments'));
     }
 
-    public function show($id)
+    public function show($encryptedId)
     {
+        try {
+            // Dekripsi ID untuk mendapatkan ID asli
+            $id = Crypt::decryptString($encryptedId);
+        } catch (DecryptException $e) {
+            // Tangani jika ID tidak bisa didekripsi
+            abort(404, "Invalid assignment identifier.");
+        }
+
+        // Cari assignment berdasarkan ID
         $assignment = Assignment::with(['classRoom.teacher', 'submissions'])->findOrFail($id);
 
-        // Convert due_date to Carbon instance if it's not already
+        // Pastikan due_date adalah instance dari Carbon
         if (!($assignment->due_date instanceof Carbon)) {
             $assignment->due_date = Carbon::parse($assignment->due_date);
         }
 
+        // Mengembalikan view dengan data assignment
         return view('task.task-details', compact('assignment'));
+    }
+
+    public function showTaskProgress()
+    {
+        // Asumsi user id dapat diambil dari session atau autentikasi
+        $userId = auth()->id();
+
+        // Hitung total assignments yang dimiliki user
+        $totalAssignments = UserAssignment::where('user_id', $userId)->count();
+
+        // Hitung total assignments yang berstatus 'approved'
+        $approvedAssignments = UserAssignment::where('user_id', $userId)
+            ->where('status', 'approved')
+            ->count();
+
+        // Hitung persentase
+        $progressPercentage = $totalAssignments > 0 ? ($approvedAssignments / $totalAssignments) * 100 : 0;
+
+        return view('index', compact('progressPercentage'));
     }
 }

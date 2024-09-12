@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Existing Styles */
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #ad88c6, #9b6ba6);
+}
+
+/* Info Yuwa */
+body .body {
+    font-family: "Poppins", sans-serif;
+    background: white;
+}

@@ -10,15 +10,15 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            ClassRoomSeeder::class,
-            ClassUserSeeder::class,
-            AssignmentSeeder::class,
-            SubmissionSeeder::class,
-            CommentSeeder::class,
-            ProdiSeeder::class,
-            ProdiUserSeeder::class,
-            UserAssignmentSeeder::class,
-            AnnouncementSeeder::class,
+            // ClassRoomSeeder::class,
+            // ClassUserSeeder::class,
+            // AssignmentSeeder::class,
+            // SubmissionSeeder::class,
+            // CommentSeeder::class,
+            // ProdiSeeder::class,
+            // ProdiUserSeeder::class,
+            // UserAssignmentSeeder::class,
+            // AnnouncementSeeder::class,
         ]);
     }
 }

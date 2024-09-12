@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('profile_image')->nullable();
             $table->integer('total_grade')->default(0);
+            $table->enum('user_status_verified', ['active', 'not_active'])->default('not_active');
             $table->rememberToken();
             $table->timestamps();
         });

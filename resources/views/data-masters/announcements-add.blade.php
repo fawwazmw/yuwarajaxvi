@@ -28,6 +28,19 @@
                         @csrf
                         <div class="row">
                             <div class="mb-3">
+                                <div class="mb-3">
+                                    <label for="announcement_image" class="form-label">Headline Image</label>
+                                    <input type="file" class="form-control dropify" id="announcement_image"
+                                        name="announcement_image" />
+                                    <div class="form-text">Disarankan memiliki rasio 16 : 9 atau berukuran tidak lebih
+                                        dari 2MB</div>
+                                    <div class="alert alert-danger invalid-feedback" role="alert"
+                                        id="profile_image_error">
+                                        <i class="mdi mdi-alert-outline me-2"></i> Ukuran File lebih dari
+                                        <strong>2MB</strong>
+                                        compress atau ganti image untuk ubah profile image
+                                    </div>
+                                </div>
                                 <label for="validationCustomTitle" class="form-label">Announcement Title</label>
                                 <input type="text" class="form-control" id="validationCustomTitle" name="title"
                                     placeholder="Announcement Title" required />

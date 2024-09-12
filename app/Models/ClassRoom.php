@@ -26,6 +26,12 @@ class ClassRoom extends Model
         static::creating(function ($model) {
             $model->class_code = self::generateUniqueClassCode();
         });
+
+        static::deleting(function ($class) {
+            // Delete related records
+            $class->students()->detach();
+            $class->assignments()->delete();
+        });
     }
 
     public static function generateUniqueClassCode()
@@ -55,5 +61,17 @@ class ClassRoom extends Model
     public function assignments()
     {
         return $this->hasMany(Assignment::class, 'class_id');
+    }
+
+    // Accessor untuk teacher_name
+    public function getTeacherNameAttribute()
+    {
+        return $this->teacher ? $this->teacher->name : 'No SPV';
+    }
+
+    // Accessor untuk assignments_count
+    public function getAssignmentsCountAttribute()
+    {
+        return $this->assignments->count();
     }
 }

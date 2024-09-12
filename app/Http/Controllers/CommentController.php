@@ -29,15 +29,21 @@ class CommentController extends Controller
             'assignment_id' => 'required|exists:assignments,id',
             'comment' => 'required|string|max:1000',
         ]);
-
+    
         $comment = new Comment();
         $comment->assignment_id = $request->assignment_id;
         $comment->user_id = auth()->id(); // Assuming the user is authenticated
         $comment->comment = $request->comment;
         $comment->save();
-
-        return redirect()->back()->with('success', 'Comment added successfully.');
+    
+        // Check if the request is coming from the task details page
+        if ($request->has('return_to_task') && $request->return_to_task === 'true') {
+            return redirect()->route('tasks.show', ['id' => $request->assignment_id])->with('success', 'Yay kamu berhasil nambah comment!');
+        }
+    
+        return redirect()->route('comments.index')->with('success', 'Cie ada komentar baru nich');
     }
+
 
     public function edit($id)
     {
@@ -60,7 +66,7 @@ class CommentController extends Controller
 
         Log::info('Comment updated: ' . $comment);
 
-        return redirect()->route('comments.index')->with('success', 'Comment updated successfully.');
+        return redirect()->route('comments.index')->with('success', 'Wow, anda berhasil memperbarui komentar');
     }
 
     public function destroy($id)
@@ -70,6 +76,6 @@ class CommentController extends Controller
 
         Log::info('Comment deleted: ' . $comment);
 
-        return response()->json(['success' => 'Comment deleted successfully.']);
+        return redirect()->route('comments.index')->with('success', 'Yeay komentar berhasil dihapus!');
     }
 }

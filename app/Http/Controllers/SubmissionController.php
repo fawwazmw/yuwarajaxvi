@@ -8,13 +8,37 @@ use App\Models\User;
 use App\Models\UserAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class SubmissionController extends Controller
 {
-    // Admin methods
     public function index()
     {
-        $submissions = Submission::with(['assignment.classRoom', 'student'])->get();
+        $user = Auth::user();
+    
+        if ($user->role === 'admin') {
+            // Admin sees all submissions
+            $submissions = Submission::with(['assignment.classRoom', 'student'])->get();
+        } elseif ($user->role === 'teacher') {
+            // Get the classes that the teacher is assigned to
+            $teacherClasses = $user->classes()->pluck('classes.id');
+    
+            if ($teacherClasses->isEmpty()) {
+                Log::info("Teacher ID {$user->id} is not assigned to any classes.");
+            }
+    
+            // Fetch submissions only from the teacher's classes
+            $submissions = Submission::whereHas('assignment.classRoom', function ($query) use ($teacherClasses) {
+                $query->whereIn('classes.id', $teacherClasses);
+            })->with(['assignment.classRoom', 'student'])->get();
+    
+            if ($submissions->isEmpty()) {
+                Log::info("No submissions found for Teacher ID {$user->id} in their assigned classes.");
+            }
+        } else {
+            return redirect()->back()->with('error', 'Unauthorized access');
+        }
+    
         return view('data-masters.submissions', compact('submissions'));
     }
 
@@ -48,7 +72,7 @@ class SubmissionController extends Controller
 
             Log::info("Submission created: Submission ID {$submission->id}");
 
-            return redirect()->route('submissions.index')->with('success', 'Submission added successfully');
+            return redirect()->route('submissions.index')->with('success', 'Yeay berhasil menambahkan jawaban');
         } catch (\Exception $e) {
             Log::error("Error creating submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add submission');
@@ -93,7 +117,7 @@ class SubmissionController extends Controller
 
             Log::info("Submission updated: Submission ID {$submission->id}");
 
-            return redirect()->route('submissions.index')->with('success', 'Submission updated successfully');
+            return redirect()->route('submissions.index')->with('success', 'Terima kasih telah mengoreksi!');
         } catch (\Exception $e) {
             Log::error("Error updating submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update submission');
@@ -114,7 +138,7 @@ class SubmissionController extends Controller
                 $userAssignment->update(['status' => 'assigned']);
             }
 
-            return redirect()->route('submissions.index')->with('success', 'Submission deleted successfully');
+            return redirect()->route('submissions.index')->with('success', 'Wah jawaban berhasil dihapus!');
         } catch (\Exception $e) {
             Log::error("Error deleting submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to delete submission');
@@ -122,6 +146,8 @@ class SubmissionController extends Controller
     }
 
     // User methods
+
+
     public function storeUser(Request $request)
     {
         $request->validate([
@@ -143,8 +169,7 @@ class SubmissionController extends Controller
             );
 
             Log::info("User submission created: Submission ID {$submission->id}");
-
-            return redirect()->route('user.submissions.index')->with('success', 'Submission added successfully');
+            return redirect()->route('user.submissions.store')->with('success', 'Kerja bagus, anda berhasil submit tugas >_<');
         } catch (\Exception $e) {
             Log::error("Error creating user submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to add submission');
@@ -168,7 +193,7 @@ class SubmissionController extends Controller
 
             Log::info("Submission updated: ", $submission->toArray());
 
-            return redirect()->route('user.submissions.index')->with('success', 'Submission updated successfully');
+            return redirect()->route('user.submissions.store')->with('success', 'Wow perbarui jawaban apanich wkwk');
         } catch (\Exception $e) {
             Log::error("Error updating user submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to update submission');
@@ -189,7 +214,7 @@ class SubmissionController extends Controller
                 $userAssignment->update(['status' => 'assigned']);
             }
 
-            return redirect()->route('user.submissions.index')->with('success', 'Submission deleted successfully');
+            return redirect()->route('user.submissions.store')->with('success', 'Wow jawaban kamu berhasil dihapus!');
         } catch (\Exception $e) {
             Log::error("Error deleting user submission: " . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to delete submission');

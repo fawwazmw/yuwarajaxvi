@@ -16,18 +16,50 @@ class ClusterController extends Controller
             'class_code' => 'required|exists:classes,class_code',
         ]);
 
+        // Dapatkan kelas berdasarkan kode
         $class = ClassRoom::where('class_code', $request->class_code)->first();
+
+        // Attach user ke kelas
         $class->students()->attach(auth()->id());
 
-        return redirect()->route('user.clusters.index')->with('success', 'Successfully joined the cluster.');
+        // Ambil semua assignments di kelas tersebut
+        $assignments = $class->assignments;
+
+        // Loop melalui assignments dan tambahkan ke user_assignments
+        foreach ($assignments as $assignment) {
+            $existingAssignment = DB::table('user_assignments')
+                ->where('assignment_id', $assignment->id)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$existingAssignment) {
+                DB::table('user_assignments')->insert([
+                    'assignment_id' => $assignment->id,
+                    'user_id' => auth()->id(),
+                    'status' => 'assigned',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        return redirect()->route('user.clusters.index')->with('success', 'Cie kamu berhasil masuk cluster dan mendapatkan tugas hehe.');
     }
 
     public function leaveClass($id)
     {
         $class = ClassRoom::findOrFail($id);
+
+        // Hapus hubungan antara user dan class
         $class->students()->detach(auth()->id());
 
-        return redirect()->route('user.clusters.index')->with('success', 'Successfully left the cluster.');
+        // Hapus semua assignment yang terkait dengan class ini untuk user yang bersangkutan
+        DB::table('user_assignments')
+            ->where('user_id', auth()->id())
+            ->whereIn('assignment_id', $class->assignments->pluck('id'))
+            ->delete();
+
+        return redirect()->route('user.clusters.index')->with('success', 'Waduh kenapa anda keluar cluster?');
     }
 
     public function index()
@@ -37,12 +69,6 @@ class ClusterController extends Controller
                 $query->where('role', 'student');
             }])
             ->get();
-
-        $classes = $classes->map(function ($class) {
-            $class->teacher_name = $class->teacher ? $class->teacher->name : 'No SPV';
-            $class->assignments_count = $class->assignments->count();
-            return $class;
-        });
 
         return view('data-masters.clusters', compact('classes'));
     }
@@ -59,12 +85,6 @@ class ClusterController extends Controller
                 $query->where('role', 'student');
             }])
             ->get();
-
-        $classes = $classes->map(function ($class) {
-            $class->teacher_name = $class->teacher ? $class->teacher->name : 'No SPV';
-            $class->assignments_count = $class->assignments->count();
-            return $class;
-        });
 
         return view('clusters.clusters', compact('classes'));
     }
@@ -94,7 +114,7 @@ class ClusterController extends Controller
 
         Log::info('Cluster added: ' . $class);
 
-        return redirect()->route('clusters.index')->with('success', 'Cluster added successfully.');
+        return redirect()->route('clusters.index')->with('success', 'Keren cluster baru nich');
     }
 
     public function edit($id)
@@ -133,7 +153,7 @@ class ClusterController extends Controller
 
         Log::info('Cluster updated: ' . $class);
 
-        return redirect()->route('clusters.index')->with('success', 'Cluster updated successfully.');
+        return redirect()->route('clusters.index')->with('success', 'Wow data cluster berhasil di perbarui');
     }
 
     public function destroy($id)
@@ -145,6 +165,6 @@ class ClusterController extends Controller
 
         Log::info('Cluster deleted: ' . $class);
 
-        return response()->json(['success' => 'Cluster deleted successfully.']);
+        return redirect()->route('clusters.index')->with('success', 'Yay cluster berhasil dihapus');
     }
 }

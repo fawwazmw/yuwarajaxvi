@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     @include('layouts.shared.title-meta', ['title' => 'Reset Password'])
-
     @include('layouts.shared.head-css')
 </head>
-
 <body class="authentication-bg authentication-bg-pattern">
-
     <div class="account-pages mt-5 mb-5">
         <div class="container">
             <div class="row justify-content-center">
@@ -23,8 +19,7 @@
                         <div class="card-body p-4">
                             <div class="text-center mb-4">
                                 <h4 class="text-uppercase mt-0 mb-3">Reset Password</h4>
-                                <p class="text-muted mb-0 font-13">Enter your email address and we'll send you an email
-                                    with instructions to reset your password.</p>
+                                <p class="text-muted mb-0 font-13">Enter your email address and we'll send you an email with instructions to reset your password.</p>
                             </div>
 
                             @if (session('status'))
@@ -32,7 +27,7 @@
                                     {{ session('status') }}
                                 </div>
                             @endif
-
+                            
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -47,31 +42,25 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="emailaddress" class="form-label">Email address</label>
-                                    <input class="form-control" type="email" id="emailaddress" name="email" required
-                                        placeholder="Enter your email">
+                                    <input class="form-control" type="email" id="emailaddress" name="email" required placeholder="Enter your email">
                                 </div>
 
                                 <div class="mb-3 text-center d-grid">
                                     <button class="btn btn-primary" type="submit"> Reset Password </button>
                                 </div>
                             </form>
-                        </div> <!-- end card-body -->
-                    </div> <!-- end card -->
+                        </div>
+                    </div>
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-black">Back to <a href="{{ route('login') }}" class="text-dark ms-1"><b>Log
-                                        in</b></a></p>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
-                </div> <!-- end col -->
-            </div> <!-- end row -->
-        </div> <!-- end container -->
-    </div> <!-- end page -->
-
-    <!-- App js -->
+                            <p class="text-black">Back to <a href="{{ route('login') }}" class="text-dark ms-1"><b>Log in</b></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @vite('resources/js/app.js')
-
 </body>
-
 </html>

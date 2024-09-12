@@ -20,6 +20,8 @@ use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\RankMahasiswaController;
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -29,7 +31,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
+    Route::put('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/lock-screen', [LockScreenController::class, 'showLockScreen'])->name('lock-screen');
     Route::post('/lock-screen', [LockScreenController::class, 'unlockScreen'])->name('unlock-screen');
     Route::middleware('lock.screen')->group(function () {
-        Route::get('/home', fn () => view('index'))->name('home');
+        Route::get('/home', fn() => view('index'))->name('home');
     });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -83,9 +85,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/task/task-details/{id}', [AssignmentController::class, 'show'])->name('tasks.show');
     Route::get('/task/task-list', [AssignmentController::class, 'taskView'])->name('assignments.taskView');
+    Route::get('/index', [AssignmentController::class, 'showTaskProgress'])->name('index');
+    Route::get('/home', [AssignmentController::class, 'showTaskProgress'])->name('home');
 
     Route::post('/assignments/{id}/submit', [AssignmentController::class, 'submit'])->name('assignments.submit');
-
 
     // Submission Admin
     Route::get('/data-masters/submissions', [SubmissionController::class, 'index'])->name('submissions.index');
@@ -96,6 +99,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/submissions/{id}', [SubmissionController::class, 'destroy'])->name('submissions.destroy');
 
     // Submission User
+
     Route::post('/task/submissions', [SubmissionController::class, 'storeUser'])->name('user.submissions.store');
     Route::put('/task/submissions/{id}', [SubmissionController::class, 'updateUser'])->name('user.submissions.update');
     Route::delete('/task/submissions/{id}', [SubmissionController::class, 'destroyUser'])->name('user.submissions.destroy');
@@ -123,5 +127,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-masters/announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
     Route::put('/data-masters/announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('/data-masters/announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::get('/home', [AnnouncementController::class, 'latest'])->name('home');
     Route::get('/index', [AnnouncementController::class, 'latest'])->name('index');
+    Route::get('/announcement/announcement-list', [AnnouncementController::class, 'list'])->name('announcements.list');
+    Route::get('/announcement/announcement/{id}', [AnnouncementController::class, 'show'])->name('announcements.show');
+    Route::get('/announcement/announcement/{id}', [AnnouncementController::class, 'showDetail'])->name('announcements.show');
+    Route::get('/info-yuwa-detail/{id}', [AnnouncementController::class, 'showInfoYuwaDetail'])->name('announcements.info_yuwa_detail');
+
+
+
+    // Rank
+    Route::get('/rank/ranks', [RankMahasiswaController::class, 'index'])->name('rank.mahasiswa');
 });

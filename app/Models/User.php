@@ -20,7 +20,8 @@ class User extends Authenticatable
         'nim',
         'description',
         'profile_image',
-        'total_grade'
+        'total_grade',
+        'user_status_verified'
     ];
 
     protected $hidden = [
@@ -50,5 +51,10 @@ class User extends Authenticatable
     public function userAssignments()
     {
         return $this->hasMany(UserAssignment::class);
+    }
+    
+   public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\CustomResetPassword($token));
     }
 }

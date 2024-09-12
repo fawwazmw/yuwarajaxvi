@@ -29,7 +29,7 @@ class ProdiController extends Controller
 
         Log::info('Prodi added: ' . $prodi);
 
-        return redirect()->route('prodis.index')->with('success', 'Prodi added successfully.');
+        return redirect()->route('prodis.index')->with('success', 'Buset ada prodi baru ni bos');
     }
 
     public function edit($id)
@@ -49,7 +49,7 @@ class ProdiController extends Controller
 
         Log::info('Prodi updated: ' . $prodi);
 
-        return redirect()->route('prodis.index')->with('success', 'Prodi updated successfully.');
+        return redirect()->route('prodis.index')->with('success', 'Prodi berhasil di perbarui bos!');
     }
 
     public function destroy($id)
@@ -59,6 +59,6 @@ class ProdiController extends Controller
 
         Log::info('Prodi deleted: ' . $prodi);
 
-        return response()->json(['success' => 'Prodi deleted successfully.']);
+        return redirect()->route('prodis.index')->with('success', 'Waw prodi berhasil dihilangkan!');
     }
 }

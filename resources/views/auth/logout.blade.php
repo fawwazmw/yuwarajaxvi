@@ -44,8 +44,8 @@
                                     </div>
                                 </div>
 
-                                <h3>See you again!</h3>
-                                <p class="text-muted"> You are now successfully signed out. </p>
+                                <h3>Sampai berjumpa kembali!</h3>
+                                <p class="text-muted"> Wow kamu berhasil logout dari dashboard! </p>
                             </div>
                         </div> <!-- end card-body -->
                     </div> <!-- end card -->

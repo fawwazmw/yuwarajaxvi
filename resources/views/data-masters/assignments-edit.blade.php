@@ -29,19 +29,18 @@
                         enctype="multipart/form-data" class="needs-validation" novalidate>
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="id" value="{{ $assignment->id }}">
                         <div class="row">
                             <div class="mb-3">
                                 <label for="validationCustomTitle" class="form-label">Title</label>
                                 <input type="text" class="form-control" id="validationCustomTitle" name="title"
-                                    placeholder="Title" value="{{ $assignment->title }}" required />
+                                    placeholder="Title" value="{{ old('title', $assignment->title) }}" required />
                                 <div class="invalid-feedback">
                                     Please enter a valid title.
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="description-textarea" class="form-label">Description</label>
-                                <textarea class="form-control" id="description-textarea" rows="5" name="description">{{ $assignment->description }}</textarea>
+                                <textarea class="form-control" id="description-textarea" rows="5" name="description">{{ old('description', $assignment->description) }}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Class</label>
@@ -49,7 +48,7 @@
                                     <option value="">Select Class</option>
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}"
-                                            {{ $assignment->class_id == $class->id ? 'selected' : '' }}>
+                                            {{ old('class_id', $assignment->class_id) == $class->id ? 'selected' : '' }}>
                                             {{ $class->name }}
                                         </option>
                                     @endforeach
@@ -58,8 +57,16 @@
                                     Please select a valid class.
                                 </div>
                             </div>
+                            <div class="mb-3">
+                                <label for="validationCustomDueDate" class="form-label">Due Date</label>
+                                <input type="date" class="form-control" id="validationCustomDueDate" name="due_date"
+                                    value="{{ old('due_date', \Carbon\Carbon::parse($assignment->due_date)->format('Y-m-d')) }}"
+                                    required />
+                                <div class="invalid-feedback">
+                                    Please select a valid due date.
+                                </div>
+                            </div>
                         </div>
-
                         <button class="btn btn-warning float-start" type="submit">Update Assignment</button>
                     </form>
                 </div> <!-- end card-body-->

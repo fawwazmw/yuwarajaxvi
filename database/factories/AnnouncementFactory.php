@@ -15,6 +15,7 @@ class AnnouncementFactory extends Factory
         return [
             'title' => $faker->sentence,
             'content' => $faker->paragraph,
+            'announcement_image' => $faker->imageUrl
         ];
     }
 }

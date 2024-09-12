@@ -42,14 +42,14 @@
                                                     @endif
                                                 </span>
                                                 <h5 class="mt-0">
-                                                    <a href="{{ route('tasks.show', $userAssignment->assignment->id) }}"
+                                                    <a href="{{ route('tasks.show', Crypt::encryptString($userAssignment->assignment->id)) }}"
                                                         class="text-dark">{{ $userAssignment->assignment->title }}</a>
                                                 </h5>
                                                 <ul class="list-inline">
                                                     <li class="list-inline-item">
                                                         <a href="" data-bs-toggle="tooltip" data-bs-placement="top"
                                                             title="{{ $userAssignment->assignment->classRoom->teacher->name }}">
-                                                            <img src="{{ $userAssignment->assignment->classRoom->teacher->profile_image }}"
+                                                            <img src="{{ $userAssignment->assignment->classRoom->teacher->profile_image ? asset($userAssignment->assignment->classRoom->teacher->profile_image) : asset('/images/users/user-1.jpg') }}" title="{{ $userAssignment->assignment->classRoom->teacher->name }}"
                                                                 alt="img" class="avatar-sm rounded-circle">
                                                         </a>
                                                     </li>

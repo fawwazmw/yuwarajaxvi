@@ -25,7 +25,7 @@ class PasswordController extends Controller
         $user = Auth::user();
 
         if (!Hash::check($request->current_password, $user->password)) {
-            return redirect()->back()->with('error', 'Current password is incorrect.');
+            return redirect()->back()->with('error', 'Hayo, salah password lama mu');
         }
 
         $newPassword = Hash::make($request->new_password);
@@ -37,6 +37,6 @@ class PasswordController extends Controller
 
         Log::info('Password updated for user: ' . $user->id);
 
-        return redirect()->back()->with('success', 'Password updated successfully.');
+        return redirect()->back()->with('success', 'Nice password kamu diperbarui, jangan lupa lagi ya');
     }
 }

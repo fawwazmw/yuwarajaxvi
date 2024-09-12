@@ -6,7 +6,7 @@
     @vite(['node_modules/mohithg-switchery/dist/switchery.min.css', 'node_modules/multiselect/css/multi-select.css', 'node_modules/select2/dist/css/select2.css', 'node_modules/selectize/dist/css/selectize.bootstrap3.css', 'node_modules/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'])
 @endsection
 
-@section('content')
+@section('content')@if (Auth::user()->role !== 'student')
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -33,12 +33,14 @@
                         <div class="row">
                             <div class="mb-3">
                                 <label for="assignment-select" class="form-label">Assignment</label>
-                                <select class="form-select" id="assignment-select" name="assignment_id" required disabled>
+                                <select class="form-select" id="assignment-select" name="assignment_id" required
+                                    disabled>
                                     <option value="">Select Assignment</option>
                                     @foreach ($assignments as $assignment)
                                         <option value="{{ $assignment->id }}"
                                             {{ $submission->assignment_id == $assignment->id ? 'selected' : '' }}>
-                                            {{ $assignment->title }} - Cluster {{ optional($assignment->classRoom)->name }}
+                                            {{ $assignment->title }} - Cluster
+                                            {{ optional($assignment->classRoom)->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -74,7 +76,8 @@
                                     <option value="assigned" {{ $submission->status == 'assigned' ? 'selected' : '' }}>
                                         Assigned</option>
                                     <option value="under review"
-                                        {{ $submission->status == 'under review' ? 'selected' : '' }}>Under Review</option>
+                                        {{ $submission->status == 'under review' ? 'selected' : '' }}>Under Review
+                                    </option>
                                     <option value="approved" {{ $submission->status == 'approved' ? 'selected' : '' }}>
                                         Approved</option>
                                 </select>
@@ -84,6 +87,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="grade-input" class="form-label">Grade</label>
+                                <span class="text-danger">Note: (1 - 100)</span>
                                 <input type="number" class="form-control" id="grade-input" name="grade"
                                     value="{{ $submission->grade }}" required>
                                 <div class="invalid-feedback">
@@ -98,11 +102,16 @@
             </div> <!-- end card-->
         </div><!-- end col -->
     </div>
-    <!-- end row -->
+@else
+    @php
+        abort(404);
+    @endphp
+@endif
+<!-- end row -->
 @endsection
 
 @section('script')
-    @vite('resources/js/pages/widgets.init.js')
-    @vite(['resources/js/pages/form-fileuploads.init.js'])
-    @vite(['resources/js/pages/form-advanced.init.js'])
+@vite('resources/js/pages/widgets.init.js')
+@vite(['resources/js/pages/form-fileuploads.init.js'])
+@vite(['resources/js/pages/form-advanced.init.js'])
 @endsection

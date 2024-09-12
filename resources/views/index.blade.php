@@ -4,8 +4,26 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <style>
+        @media (max-width: 1024px) {
+            .ml-3.d-flex.align-items-center img {
+                display: none;
+            }
+        }
 
+        @media (max-width: 425px) {
+            .line-pengumuman {
+                margin-top: -10px !important;
+            }
+        }
+
+        @media (max-width: 425px) {
+            .line-pengumuman {
+                margin-top: -30px !important;
+            }
+        }
+    </style>
+    <div class="row">
         <div class="col-md-4">
             <a href="{{ route('second', ['task', 'task-list']) }}" class="text-decoration-none">
                 <div class="card card-body d-flex flex-row align-items-center" style="height: 200px;">
@@ -41,7 +59,7 @@
         </div>
 
         <div class="col-md-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('second', ['rank', 'ranks']) }}" class="text-decoration-none">
                 <div class="card card-body d-flex flex-row align-items-center" style="height: 200px;">
                     <div class="flex-grow-1">
                         <i class="fas fa-medal text-success noti-icon mb-2"></i>
@@ -56,7 +74,6 @@
                 </div>
             </a>
         </div>
-
     </div>
 
     <div class="row">
@@ -70,14 +87,16 @@
 
                     <div class="widget-chart-box-1 mx-auto" dir="ltr">
                         <input data-plugin="knob" data-width="80" data-height="80" data-fgColor="#f05050"
-                            data-bgColor="#F9B9B9" value="58" data-skin="tron" data-angleOffset="180"
+                            data-bgColor="#F9B9B9" value="{{ $progressPercentage }}" data-skin="tron" data-angleOffset="180"
                             data-readOnly="true" data-thickness=".15" />
                     </div>
 
                     <hr class="my-3">
 
                     <div class="mt-auto">
-                        <a href="#" class="btn btn-primary border-end-0">Lihat Progress</a>
+                        <a href="{{ route('second', ['task', 'task-list']) }}" class="btn btn-primary border-end-0">
+                            Lihat Progress
+                        </a>
                     </div>
                 </div>
             </div>
@@ -92,18 +111,19 @@
                     <h5 class="card-title mb-4">Berikut adalah informasi terkini tentang Yuwaraja XVI</h5>
                     @if ($latestAnnouncement)
                         <div class="alert alert-info mb-3" role="alert">
-                            <i class="mdi mdi-information-outline me-2"></i> {{ $latestAnnouncement->content }}
+                            <i class="mdi mdi-information-outline me-2"></i>
+                            {{ strlen($latestAnnouncement->title) > 95 ? substr($latestAnnouncement->title, 0, 95) . '...' : $latestAnnouncement->title }}
                         </div>
                     @else
                         <div class="alert alert-danger mb-3" role="alert">
                             <i class="mdi mdi-block-helper me-2"></i> Tidak ada <strong>Pengumuman</strong> check untuk
-                            lihat
-                            pengumuman sebelumnya!
+                            lihat pengumuman sebelumnya!
                         </div>
                     @endif
-                    <hr style="margin-top: 42px;">
+                    <hr class="line-pengumuman" style="margin-top: 42px;">
                     <div class="mt-auto">
-                        <a href="{{ route('announcements.index') }}" class="btn btn-primary border-end-0">Lihat
+                        <a href="{{ route('second', ['announcement', 'announcement-list']) }}"
+                            class="btn btn-primary border-end-0">Lihat
                             Pengumuman</a>
                     </div>
                 </div>
@@ -111,7 +131,7 @@
         </div>
     </div>
 
-    <div class="col-lg">
+    {{-- <div class="col-lg">
         <div class="card">
             <div class="card-body">
                 <div class="dropdown float-end">
@@ -143,10 +163,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('script')
-    @vite('resources/js/pages/dashboard.init.js')
+    @vite('resources/js/pages/widgets.init.js')
     @vite(['resources/js/pages/morris.init.js'])
 @endsection

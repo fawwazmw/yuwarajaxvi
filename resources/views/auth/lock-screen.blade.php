@@ -29,7 +29,7 @@
                                     <img src="{{ Auth::user()->profile_image ? asset(Auth::user()->profile_image) : '/images/users/user-1.jpg' }}"
                                         width="88" alt="user-image" class="rounded-circle img-thumbnail"
                                         style="width: 120px; height: 120px; object-fit: cover;">
-                                    <p class="text-muted my-4">Enter your password to login again</p>
+                                    <p class="text-muted my-4">Ayo masukan Passwordmu!</p>
                                 @else
                                     <p class="text-muted my-4">User not authenticated</p>
                                 @endif

@@ -15,18 +15,34 @@ class UserFactory extends Factory
     {
         $faker = FakerFactory::create('id_ID'); // Set locale to Indonesian
 
+        // return [
+        //     'name' => $faker->name,
+        //     'email' => $faker->unique()->safeEmail,
+        //     'email_verified_at' => now(),
+        //     'password' => bcrypt('password'), // password default
+        //     'role' => $faker->randomElement(['admin', 'teacher', 'student']),
+        //     'phone' => $faker->phoneNumber,
+        //     'nim' => $faker->unique()->numberBetween(100000, 999999),
+        //     'description' => $faker->text,
+        //     'profile_image' => $faker->imageUrl,
+        //     'total_grade' => $faker->numberBetween(0, 1000),
+        //     'user_status_verified' => $faker->randomElement(['active', 'not_active']),
+        //     'remember_token' => Str::random(10),
+        // ];
+
         return [
-            'name' => $faker->name,
-            'email' => $faker->unique()->safeEmail,
+            'name' => 'Fawwaz Mufid Wardaya',
+            'email' => 'fawwazmw@gmail.com',
             'email_verified_at' => now(),
-            'password' => bcrypt('password'), // password default
-            'role' => $faker->randomElement(['admin', 'teacher', 'student']),
-            'phone' => $faker->phoneNumber,
-            'nim' => $faker->unique()->numberBetween(100000, 999999),
-            'description' => $faker->text,
-            'profile_image' => $faker->imageUrl,
-            'total_grade' => $faker->numberBetween(0, 1000),
-            'remember_token' => Str::random(10),
+            'password' => bcrypt('fawwazmw123'), // password default
+            'role' => 'admin',
+            'phone' => '089527374152',
+            'nim' => 233140707111010,
+            'description' => 'ini super admin',
+            'profile_image' => null,
+            'total_grade' => 0,
+            'user_status_verified' => 'active',
+            'remember_token' => null,
         ];
     }
 }

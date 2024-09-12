@@ -30,12 +30,14 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
-
+                            
                             @if ($errors->any())
                                 <div class="alert alert-danger">
-                                    @foreach ($errors->all() as $error)
-                                        {{ $error }}
-                                    @endforeach
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             @endif
 
@@ -45,18 +47,12 @@
                                     <label for="emailaddress" class="form-label">Email address</label>
                                     <input class="form-control" type="email" id="emailaddress" name="email" required
                                         placeholder="Enter your email" value="{{ old('email') }}">
-                                    @if ($errors->has('email'))
-                                        <span class="text-danger">{{ $errors->first('email') }}</span>
-                                    @endif
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <input class="form-control" type="password" id="password" name="password" required
                                         placeholder="Enter your password">
-                                    @if ($errors->has('password'))
-                                        <span class="text-danger">{{ $errors->first('password') }}</span>
-                                    @endif
                                 </div>
 
                                 <div class="mb-3">
@@ -76,9 +72,9 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p><a href="{{ route('password.request') }}" class="ms-1 text-black"><i
-                                        class="fa fa-lock me-1"></i>Forgot your
-                                    password?</a></p>
+                            <!--<p><a href="{{ route('password.request') }}" class="ms-1 text-black"><i-->
+                            <!--            class="fa fa-lock me-1"></i>Forgot your-->
+                            <!--        password?</a></p>-->
                             <p class="text-black">Don't have an account? <a href="{{ route('register') }}"
                                     class="text-dark ms-1"><b>Sign Up</b></a></p>
                         </div> <!-- end col -->

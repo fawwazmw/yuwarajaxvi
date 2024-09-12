@@ -22,52 +22,69 @@
                             </div>
                         @endif
 
-                        <a href="{{ route('submissions.create') }}"
-                            class="btn btn-purple rounded-pill w-md waves-effect waves-light mb-3 float-end">
-                            <i class="mdi mdi-plus"></i> Add Submission
-                        </a>
+                        @if (Auth::user()->role !== 'student' && Auth::user()->role !== 'teacher')
+                            <a href="{{ route('submissions.create') }}"
+                                class="btn btn-purple rounded-pill w-md waves-effect waves-light mb-3 float-end">
+                                <i class="mdi mdi-plus"></i> Add Submission
+                            </a>
+                        @endif
 
                         <h4 class="mt-0 header-title">Submissions</h4>
                         <p class="text-muted font-14 mb-3">
                             List of submissions.
                         </p>
 
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
-                            <thead>
-                                <tr>
-                                    <th>Assignment</th>
-                                    <th>Cluster</th>
-                                    <th>Student</th>
-                                    <th>Content</th>
-                                    <th>Status</th>
-                                    <th>Grade</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($submissions as $submission)
+                        <!-- Membuat tabel menjadi responsif -->
+                        <div class="table-responsive">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+                                <thead>
                                     <tr>
-                                        <td>{{ $submission->assignment->title }}</td>
-                                        <td>{{ $submission->assignment->classRoom->name }}</td>
-                                        <td>{{ $submission->student->name }}</td>
-                                        <td>{{ Str::limit($submission->content, 50) }}</td>
-                                        <td>{{ $submission->status }}</td>
-                                        <td>{{ $submission->grade }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('submissions.edit', ['id' => $submission->id]) }}"
-                                                class="btn btn-warning btn-sm waves-effect waves-light"><i
-                                                    class="mdi mdi-pencil"></i></a>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button"
-                                                class="btn btn-danger btn-sm waves-effect waves-light delete-btn"
-                                                data-id="{{ $submission->id }}"><i class="mdi mdi-close"></i></button>
-                                        </td>
+                                        <th class="text-center">No</th>
+                                        <th>Assignment</th>
+                                        <th>Cluster</th>
+                                        <th>Student</th>
+                                        <th>Content</th>
+                                        <th>Submitted At</th>
+                                        <th>Status</th>
+                                        <th>Grade</th>
+                                        <th>Edit</th>
+                                        @if (Auth::user()->role !== 'student' && Auth::user()->role !== 'teacher')
+                                            <th>Delete</th>
+                                        @endif
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                     @php
+                                        $no = 1;
+                                    @endphp
+                                    @foreach ($submissions as $submission)
+                                        <tr>
+                                            <td class="text-center">{{ $no++ }}</td>
+                                            <td>{{ $submission->assignment->title }}</td>
+                                            <td>{{ $submission->assignment->classRoom->name }}</td>
+                                            <td>{{ $submission->student->name }}</td>
+                                            <td>{{ strlen($submission->content) > 50 ? substr($submission->content, 0, 50) : $submission->content }}</td>
+                                            <td>{{ $submission->updated_at }}</td>
+                                            <td>{{ $submission->status }}</td>
+                                            <td>{{ $submission->grade }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('submissions.edit', ['id' => $submission->id]) }}"
+                                                    class="btn btn-warning btn-sm waves-effect waves-light"><i
+                                                        class="mdi mdi-pencil"></i></a>
+                                            </td>
+                                            @if (Auth::user()->role !== 'student' && Auth::user()->role !== 'teacher')
+                                                <td class="text-center">
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-sm waves-effect waves-light delete-btn"
+                                                        data-id="{{ $submission->id }}"><i
+                                                            class="mdi mdi-close"></i></button>
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div> <!-- End table-responsive -->
                     </div>
                 </div>
             </div>
@@ -99,26 +116,14 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    displayMessage('success', data.success);
                                     setTimeout(() => {
                                         location.reload();
                                     }, 2000);
-                                } else if (data.error) {
-                                    displayMessage('danger', data.error);
                                 }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('An error occurred while deleting the submission.');
                             });
                     }
                 });
             });
-
-            function displayMessage(type, message) {
-                const messageContainer = document.getElementById('message-container');
-                messageContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-            }
         });
     </script>
 @endsection

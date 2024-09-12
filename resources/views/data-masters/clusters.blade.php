@@ -5,12 +5,12 @@
 @endsection
 
 @section('content')
-    @if (Auth::user()->role !== 'student')
+    @if (Auth::user()->role !== 'student' && Auth::user()->role !== 'teacher')
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div id="message-container"></div> <!-- Ensure this element exists for displaying messages -->
+                        <div id="message-container"></div>
                         @if (session('success'))
                             <div class="alert alert-success">
                                 {{ session('success') }}
@@ -31,40 +31,48 @@
                             Ini adalah kumpulan dari data cluster yang dimana bisa tambah dan edit
                         </p>
 
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>SPV</th>
-                                    <th>Member Cluster</th>
-                                    <th>Class Code</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($classes as $class)
+                        <!-- Membuat tabel menjadi responsif -->
+                        <div class="table-responsive">
+                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+                                <thead>
                                     <tr>
-                                        <td>{{ $class->name }}</td>
-                                        <td>{{ Str::limit($class->description, 50) }}</td>
-                                        <td>{{ $class->teacher_name }}</td>
-                                        <td>{{ $class->students_count }}</td>
-                                        <td>{{ $class->class_code }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('clusters.edit', ['id' => $class->id]) }}"
-                                                class="btn btn-warning btn-sm waves-effect waves-light edit-btn"><i
-                                                    class="mdi mdi-pencil"></i></a>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button"
-                                                class="btn btn-danger btn-sm waves-effect waves-light delete-btn"
-                                                data-id="{{ $class->id }}"><i class="mdi mdi-close"></i></button>
-                                        </td>
+                                        <th class="text-center">No</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>SPV</th>
+                                        <th>Member Cluster</th>
+                                        <th>Class Code</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $no = 1;
+                                    @endphp
+                                    @foreach ($classes as $class)
+                                        <tr>
+                                            <td class="text-center">{{ $no++ }}</td>
+                                            <td>{{ $class->name }}</td>
+                                            <td>{{ strlen($class->description) > 50 ? substr($class->description, 0, 50) . '...' : $class->description }}</td>
+                                            <td>{{ $class->teacher_name }}</td>
+                                            <td>{{ $class->students_count }}</td>
+                                            <td>{{ $class->class_code }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('clusters.edit', ['id' => $class->id]) }}"
+                                                    class="btn btn-warning btn-sm waves-effect waves-light edit-btn"><i
+                                                        class="mdi mdi-pencil"></i></a>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button"
+                                                    class="btn btn-danger btn-sm waves-effect waves-light delete-btn"
+                                                    data-id="{{ $class->id }}"><i class="mdi mdi-close"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div> <!-- End table-responsive -->
                     </div>
                 </div>
             </div>
@@ -86,36 +94,32 @@
                 button.addEventListener('click', function() {
                     const classId = this.getAttribute('data-id');
                     if (confirm('Are you sure you want to delete this cluster?')) {
-                        fetch(`/clusters/${classId}`, {
+                        fetch(`{{ route('clusters.destroy', ['id' => ':id']) }}`.replace(':id',
+                                classId), {
                                 method: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                     'Content-Type': 'application/json'
                                 }
                             })
-                            .then(response => response.json())
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
                             .then(data => {
+                                console.log(data); // Cek response untuk debugging
                                 if (data.success) {
-                                    displayMessage('success', data.success);
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 2000); // Adjust the delay if needed
-                                } else if (data.error) {
-                                    displayMessage('danger', data.error);
+                                    window.location.href = "{{ route('clusters.index') }}";
                                 }
                             })
                             .catch(error => {
-                                console.error('Error:', error);
-                                alert('An error occurred while deleting the cluster.');
+                                console.error('There was an error:', error);
                             });
                     }
                 });
             });
-
-            function displayMessage(type, message) {
-                const messageContainer = document.getElementById('message-container');
-                messageContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-            }
         });
     </script>
 @endsection

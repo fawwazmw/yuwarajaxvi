@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\UserAssignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class AnnouncementController extends Controller
 {
@@ -20,15 +23,28 @@ class AnnouncementController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'announcement_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi untuk gambar
         ]);
 
-        Announcement::create($request->all());
+        $data = $request->all();
 
-        return redirect()->route('announcements.index')
-            ->with('success', 'Announcement created successfully.');
+        // Cek apakah ada file gambar yang diupload
+        if ($request->hasFile('announcement_image')) {
+            // Simpan gambar ke dalam folder storage
+            $filePath = $request->file('announcement_image')->store('public/announcements');
+            // Simpan path gambar ke dalam database
+            $data['announcement_image'] = str_replace('public/', 'storage/', $filePath);
+        }
+
+        // Simpan pengumuman ke dalam database
+        Announcement::create($data);
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('announcements.index')->with('success', 'Asik ada pengumuman baru nich');
     }
 
     public function show(Announcement $announcement)
@@ -51,7 +67,7 @@ class AnnouncementController extends Controller
         $announcement->update($request->all());
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Announcement updated successfully.');
+            ->with('success', 'Wah pengumuman berhasil diperbarui!');
     }
 
     public function destroy(Announcement $announcement)
@@ -59,12 +75,47 @@ class AnnouncementController extends Controller
         $announcement->delete();
 
         return redirect()->route('announcements.index')
-            ->with('success', 'Announcement deleted successfully.');
+            ->with('success', 'Wow pengumuman baru saja berhasil dihapus!');
     }
 
     public function latest()
     {
         $latestAnnouncement = Announcement::latest()->first();
-        return view('index', compact('latestAnnouncement'));
+       
+        $userId = auth()->id();
+        $totalAssignments = UserAssignment::where('user_id', $userId)->count();
+        $approvedAssignments = UserAssignment::where('user_id', $userId)
+            ->where('status', 'approved')
+            ->count();
+        $progressPercentage = $totalAssignments > 0 ? ($approvedAssignments / $totalAssignments) * 100 : 0;
+        return view('index', compact('latestAnnouncement','progressPercentage'));
+    }
+
+    // app/Http/Controllers/AnnouncementController.php
+    public function indexUser()
+    {
+        $announcements = Announcement::all(); // Atau sesuaikan dengan query yang diperlukan
+        return view('announcement.announcement-detail', compact('announcements'));
+    }
+
+    public function list()
+    {
+        // Mengambil semua pengumuman dan mengurutkannya berdasarkan tanggal pembuatan dari terbaru ke terlama
+        $announcements = Announcement::orderBy('created_at', 'desc')->get();
+
+        // Kirim data pengumuman ke view announcement-list.blade.php
+        return view('announcement.announcement-list', compact('announcements'));
+    }
+
+    public function showDetail($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+        return view('announcement.announcement-detail', compact('announcement'));
+    }
+
+    public function showInfoYuwaDetail($id)
+    {
+        $announcement = Announcement::findOrFail($id);
+        return view('info-yuwa-detail', compact('announcement'));
     }
 }

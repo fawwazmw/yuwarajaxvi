@@ -132,31 +132,18 @@
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Group Cluster</label> <br />
-                                    <select class="form-select" name="class_id">
+                                    <label class="form-label">Program Studi</label> <br />
+                                    <select class="form-select" name="prodi_id">
                                         <option value="">Nothing</option>
-                                        @foreach ($classes as $class)
-                                            <option value="{{ $class->id }}"
-                                                {{ $user->classes->contains($class->id) ? 'selected' : '' }}>
-                                                {{ $class->name }}
+                                        @foreach ($prodi as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ $user->prodi->contains($item->id) ? 'selected' : '' }}>
+                                                {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <div class="mb-3">
-                            <label class="form-label">Program Studi</label> <br />
-                            <select class="form-select" name="prodi_id">
-                                <option value="">Nothing</option>
-                                @foreach ($prodi as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ $user->prodi->contains($item->id) ? 'selected' : '' }}>{{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
                         </div>
 
                         <div class="mb-3">

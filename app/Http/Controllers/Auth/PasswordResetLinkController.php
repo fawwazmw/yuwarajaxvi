@@ -15,11 +15,18 @@ class PasswordResetLinkController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink($request->only('email'));
-        return $status == Password::RESET_LINK_SENT
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.exists' => 'Email tidak ditemukan dalam database kami.'
+        ]);
+    
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+    
+        return $status === Password::RESET_LINK_SENT
             ? back()->with('status', __($status))
-            : back()->withInput($request->only('email'))
-            ->withErrors(['email' => __($status)]);
+            : back()->withErrors(['email' => __($status)]);
     }
 }

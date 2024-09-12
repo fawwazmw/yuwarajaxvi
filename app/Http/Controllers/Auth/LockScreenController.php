@@ -31,12 +31,12 @@ class LockScreenController extends Controller
 
         if (!Hash::check($request->password, $user->password)) {
             return back()->withErrors([
-                'password' => 'Pasword anda tidak sesuai dengan database',
+                'password' => 'Waduh, password kamu tidak benar hehe',
             ]);
         }
 
         session(['locked' => false]);
 
-        return redirect()->intended('home');
+        return redirect()->intended('index');
     }
 }

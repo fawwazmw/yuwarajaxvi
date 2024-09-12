@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @if (Auth::user()->role !== 'student')
+    @if (Auth::user()->role !== 'student' && Auth::user()->role !== 'teacher')
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -35,14 +35,19 @@
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
                             <thead>
                                 <tr>
+                                    <th class="text-center">No</th>
                                     <th>Name</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                        $no = 1;
+                                    @endphp
                                 @foreach ($prodis as $prodi)
                                     <tr>
+                                        <td class="text-center">{{ $no++ }}</td>
                                         <td>{{ $prodi->name }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('prodis.edit', ['id' => $prodi->id]) }}"
@@ -89,26 +94,14 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    displayMessage('success', data.success);
                                     setTimeout(() => {
                                         location.reload();
                                     }, 2000);
-                                } else if (data.error) {
-                                    displayMessage('danger', data.error);
                                 }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('An error occurred while deleting the Prodi.');
                             });
                     }
                 });
             });
-
-            function displayMessage(type, message) {
-                const messageContainer = document.getElementById('message-container');
-                messageContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
-            }
         });
     </script>
 @endsection

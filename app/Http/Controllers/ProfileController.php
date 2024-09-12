@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $classes = ClassRoom::all();
         $prodi = Prodi::all();
-        return view('account.profile', compact('user', 'classes', 'prodi'));
+        return view('account.profile', compact('user', 'prodi'));
     }
 
     public function update(Request $request)
@@ -31,8 +31,7 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'prodi_id' => 'nullable|exists:prodi,id',
-            'class_id' => 'nullable|exists:classes,id'
+            'prodi_id' => 'nullable|exists:prodi,id'
         ]);
 
         $user = Auth::user();
@@ -56,16 +55,6 @@ class ProfileController extends Controller
 
         DB::table('users')->where('id', $user->id)->update($data);
 
-        // Update class_user pivot table
-        if ($request->class_id) {
-            DB::table('class_user')->updateOrInsert(
-                ['user_id' => $user->id],
-                ['class_id' => $request->class_id, 'updated_at' => now()]
-            );
-        } else {
-            DB::table('class_user')->where('user_id', $user->id)->delete();
-        }
-
         // Update prodi_user pivot table
         if ($request->prodi_id) {
             DB::table('prodi_user')->updateOrInsert(
@@ -78,6 +67,6 @@ class ProfileController extends Controller
 
         Log::info('User profile updated: ' . $user);
 
-        return redirect()->back()->with('success', 'Profile updated successfully.');
+        return redirect()->back()->with('success', 'Nice profil kamu berhasil di perbarui!');
     }
 }
